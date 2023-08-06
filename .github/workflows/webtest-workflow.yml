@@ -4,6 +4,7 @@ on: [push]
 jobs:
     web-tests:
         runs-on: ubuntu-20.04
+        permissions: write-all  #para não ter problema de permissão quando for usar o token do github
         steps:
             - name: checkout    #vai baixar os arquivos do repositório para poder rodar nos testes
               uses: actions/checkout@v3
@@ -39,4 +40,18 @@ jobs:
                 path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
                 if-no-files-found: ignore
                 retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
-                
+
+            - name: Download Tests Results
+              if: always()
+              uses: actions/download-artifact@v1
+              with:
+                name: results-chromium
+            
+            - name: Send Reports
+              if: always()
+              uses: joonvena/robotframework-reporter-action@v2
+              with:
+                report_path: results-chromium
+                gh_access_token: ${{ secrets.GITHUB_TOKEN }}    #passando o nosso token do git
+                show_passed_tests: false
+
