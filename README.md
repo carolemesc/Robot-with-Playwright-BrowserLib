@@ -45,6 +45,8 @@
 - para colocar o robot nas dependências, é necessário um arquivo chamado "requirements.txt", assim da pra rodar o "pip install" apontando para esse arquivo
 - joonvena: reporter actions para o robotframework
 - matriz permite que o mesmo job execute em paralelo para diferentes ambientes, por exemplo, chrome, firefox... em mais de um browser no caso
+- para rodar um workflow manualmente, usamos [Tags]; [Configurações](https://docs.github.com/pt/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch)
+- para o teste rodar a partir da tag, é necessário colocar o comando `-i tag`, no caso, ficaria assim: `robot -d ./results -v HEADLESS:true -v BROWSER:${{ matrix.browser }} -i ${{ inputs.tag }} tests`, a tag é uma váriavel porque é um campo inserido pelo usuário
 
 **Exemplo de Action do Git**:
 ```name: GitHub Actions Demo
