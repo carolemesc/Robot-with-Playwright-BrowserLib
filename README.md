@@ -64,5 +64,49 @@ jobs:           `#tem que identar (cada job) de forma correta, porque é só ass
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."```
 
+**Exemplo de Action do Git para os testes desse repositório**:
+
+```name: Run WEB Test
+run-name: On Push - Web Tests Run
+on: [push]
+jobs:
+    web-tests:
+        runs-on: ubuntu-20.04
+        steps:
+            - name: checkout    #vai baixar os arquivos do repositório para poder rodar nos testes
+              uses: actions/checkout@v3
+            
+            - name: Install Python 3.10     #precisa instalar a primeira dependência que usamos para rodar os teste
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.10'
+
+            - name: Install Node.js 19.1
+              uses: actions/setup-node@v3
+              with:
+                node-version: '19.1'
+
+            - name: Install Requirements
+              run: |  #o sudo é por estar usando o ubuntu
+                python -m pip install --upgrade pip
+                pip install -U -r requirements.txt
+                sudo npm install @playwright/test
+                sudo npx playwright install-deps
+                rfbrowser init
+
+            - name: Run RF (Robot Framework) WEB tests
+              run: |
+                robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests
+
+            - name: Upload tests results
+              if: always()
+              #always diz que isso sempre vai ser executado, mesmo que algum passo anterior tenha falhado, nesse caso porque a gente está pegando o resultado do teste, então mesmo que falhe, queremos ver ele. diferentemente dos steps anteriores que só vão ser executados se o antes deles passarem
+              uses: actions/upload-artifact@v3
+              with:
+                name: results-chromium
+                path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
+                if-no-files-found: ignore
+                retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
+                ```
 
 

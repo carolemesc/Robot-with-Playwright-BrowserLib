@@ -29,3 +29,14 @@ jobs:
             - name: Run RF (Robot Framework) WEB tests
               run: |
                 robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests
+
+            - name: Upload tests results
+              if: always()
+              #always diz que isso sempre vai ser executado, mesmo que algum passo anterior tenha falhado, nesse caso porque a gente está pegando o resultado do teste, então mesmo que falhe, queremos ver ele. diferentemente dos steps anteriores que só vão ser executados se o antes deles passarem
+              uses: actions/upload-artifact@v3
+              with:
+                name: results-chromium
+                path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
+                if-no-files-found: ignore
+                retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
+                
