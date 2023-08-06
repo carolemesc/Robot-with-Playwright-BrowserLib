@@ -1,4 +1,4 @@
-name: Manual Run WEB Test
+name: Manual Run WEB Test by Browser
 run-name: Manual - Web Tests Run
 on:
   workflow_dispatch:  #indica que a execução vai ser realizada manualmente (por tags)
