@@ -44,6 +44,7 @@
 - é possível colocar no "summary" uma action de robot framework que mostra os resultados dos testes de forma mais intuitiva (como em uma tabela) - [Aula 30 - módulo 5 - 5'30"](https://www.udemy.com/course/robot-framework-com-playwright-e-github-actions/learn/lecture/37223652#questions/19678376)
 - para colocar o robot nas dependências, é necessário um arquivo chamado "requirements.txt", assim da pra rodar o "pip install" apontando para esse arquivo
 - joonvena: reporter actions para o robotframework
+- matriz permite que o mesmo job execute em paralelo para diferentes ambientes, por exemplo, chrome, firefox... em mais de um browser no caso
 
 **Exemplo de Action do Git**:
 ```name: GitHub Actions Demo
@@ -74,6 +75,7 @@ on: [push]
 jobs:
     web-tests:
         runs-on: ubuntu-20.04
+        permissions: write-all  #para não ter problema de permissão quando for usar o token do github
         steps:
             - name: checkout    #vai baixar os arquivos do repositório para poder rodar nos testes
               uses: actions/checkout@v3
@@ -109,6 +111,20 @@ jobs:
                 path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
                 if-no-files-found: ignore
                 retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
+
+            - name: Download Tests Results
+              if: always()
+              uses: actions/download-artifact@v1
+              with:
+                name: results-chromium
+            
+            - name: Send Reports
+              if: always()
+              uses: joonvena/robotframework-reporter-action@v2  #reporter actions para o robotframework
+              with:
+                report_path: results-chromium
+                gh_access_token: ${{ secrets.GITHUB_TOKEN }}    #passando o nosso token do git
+                show_passed_tests: false
 ```
 
 
