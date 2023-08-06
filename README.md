@@ -15,7 +15,7 @@
 - Framework (assim como o Cypress) da Microsoft que permite testes e2e para aplicativos web
 - Da pra simular teste em navegador móvel
 - **Evidências nativas com trace da execução, vídeos e screenshots**
-- *tace*: https://trace.playwright.dev/ --> arrasta nele o arquivo zip que o robot gera na execução e vê detalhadamente os passos que foram feitos na execução dos testes
+- *trace*: https://trace.playwright.dev/ --> arrasta nele o arquivo zip que o robot gera na execução e vê detalhadamente os passos que foram feitos na execução dos testes
 - É possível simular vários usuários usando vários contextos de navegadores, várias guias...
 - Permite salvar e reutilizar contextos -> configurações --> ***Storage***
 - Já tem esperas automáticas, por isso não precisamos usar KW com "Wait" como na Selenium, porém essa KW existe, pode ser usada e possui vários "states", como por exemplo "visible", assim, `Wait Until Element Is Visible` é o mesmo que `Wait For Elements State    selector`
@@ -35,6 +35,7 @@
 ---
 
 **Site automatizado**: https://serverest.dev/
+
 **Rodar o teste**:
 - teste específico: `robot -t "Nome do Teste" caminho_do_arquivo_de_teste.robot`
 - todos os testes do arquivo: `robot caminho/para/o/seu/arquivo_de_teste.robot`
