@@ -44,6 +44,9 @@
 - é possível colocar no "summary" uma action de robot framework que mostra os resultados dos testes de forma mais intuitiva (como em uma tabela) - [Aula 30 - módulo 5 - 5'30"](https://www.udemy.com/course/robot-framework-com-playwright-e-github-actions/learn/lecture/37223652#questions/19678376)
 - para colocar o robot nas dependências, é necessário um arquivo chamado "requirements.txt", assim da pra rodar o "pip install" apontando para esse arquivo
 
+**Exemplo de Action do Git para os testes desse repositório**
+
+
 **Exemplo de Action do Git**:
 ```name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀  `#é possível dar um nome para a execução; "github.actor" significa quem disparou o workflow`
@@ -62,7 +65,8 @@ jobs:           `#tem que identar (cada job) de forma correta, porque é só ass
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."```
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+```
 
 **Exemplo de Action do Git para os testes desse repositório**:
 
@@ -107,6 +111,6 @@ jobs:
                 path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
                 if-no-files-found: ignore
                 retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
-                ```
+```
 
 
