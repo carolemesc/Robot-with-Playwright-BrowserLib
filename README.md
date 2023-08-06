@@ -42,3 +42,26 @@
 
 # CI/CD usando o Github Actions
 - é possível colocar no "summary" uma action de robot framework que mostra os resultados dos testes de forma mais intuitiva (como em uma tabela) - [Aula 30 - módulo 5 - 5'30"](https://www.udemy.com/course/robot-framework-com-playwright-e-github-actions/learn/lecture/37223652#questions/19678376)
+
+**Exemplo de Action do Git**:
+```name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀  `#é possível dar um nome para a execução; "github.actor" significa quem disparou o workflow`
+on: [push]       `#são as "triggers": diz quando essa execução vai rodar/disparar, no caso, roda sempre que alguém der um "git push" e subir algum código no repositório e existem vários tipos de triggers (ver a documentação)`
+jobs:           `#tem que identar (cada job) de forma correta, porque é só assim que ele sabe o que faz parte do seu job`
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest    `#servidor onde está rodando o teste; "ubuntu-latest" é um servidor próprio do git`
+    steps:                    `#as ações/actions que vai executar dentro do job`
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."```
+
+
+
