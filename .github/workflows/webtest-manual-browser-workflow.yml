@@ -1,0 +1,70 @@
+name: Manual Run WEB Test
+run-name: Manual - Web Tests Run
+on:
+  workflow_dispatch:  #indica que a execução vai ser realizada manualmente (por tags)
+    inputs:           #é opcional, mas são campos que a pessoa vai ter que preencher quando ela for disparar o workflow
+      browser:
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+
+jobs:
+    web-tests:
+        runs-on: ubuntu-20.04
+        permissions: write-all  #para não ter problema de permissão quando for usar o token do github
+        # strategy:
+        #     matrix:     #a matriz é usada, nesse caso, para rodar os jobs em paralelo em diferentes browsers
+        #         browser: [chromium, firefox, webkit]
+        #     fail-fast: false    #assim, caso falhar em algum navagador, vai continuar rodando para os outros
+        steps:
+            - name: checkout    #vai baixar os arquivos do repositório para poder rodar nos testes
+              uses: actions/checkout@v3
+            
+            - name: Install Python 3.10     #precisa instalar a primeira dependência que usamos para rodar os teste
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.10'
+
+            - name: Install Node.js 19.1
+              uses: actions/setup-node@v3
+              with:
+                node-version: '19.1'
+
+            - name: Install Requirements
+              run: |  #o sudo é por estar usando o ubuntu
+                python -m pip install --upgrade pip
+                pip install -U -r requirements.txt
+                sudo npm install @playwright/test
+                sudo npx playwright install-deps
+                rfbrowser init
+
+            - name: Run RF (Robot Framework) WEB tests
+              run: |
+                robot -d ./results -v HEADLESS:true -v BROWSER:${{ inputs.browser }} tests
+
+            - name: Upload tests results
+              if: always()
+              #always diz que isso sempre vai ser executado, mesmo que algum passo anterior tenha falhado, nesse caso porque a gente está pegando o resultado do teste, então mesmo que falhe, queremos ver ele. diferentemente dos steps anteriores que só vão ser executados se o antes deles passarem
+              uses: actions/upload-artifact@v3
+              with:
+                name: results-${{ inputs.browser }}
+                path: ./results #porque lá em cima eu forcei o robot a colocar os resultados na pasta results: "robot -d ./results -v HEADLESS:true -v BROWSER:chromium tests"
+                if-no-files-found: ignore
+                retention-days: 2   #depois de 2 dias vai excluir os artefatos e não é mais possível fazer o download. isso serve para liberar memória
+
+            - name: Download Tests Results
+              if: always()
+              uses: actions/download-artifact@v1
+              with:
+                name: results-${{ inputs.browser }}
+            
+            - name: Send Reports
+              if: always()
+              uses: joonvena/robotframework-reporter-action@v2  #reporter actions para o robotframework
+              with:
+                report_path: results-${{ inputs.browser }}
+                gh_access_token: ${{ secrets.GITHUB_TOKEN }}    #passando o nosso token do git
+                show_passed_tests: false
+
