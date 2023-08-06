@@ -42,6 +42,7 @@
 
 # CI/CD usando o Github Actions
 - é possível colocar no "summary" uma action de robot framework que mostra os resultados dos testes de forma mais intuitiva (como em uma tabela) - [Aula 30 - módulo 5 - 5'30"](https://www.udemy.com/course/robot-framework-com-playwright-e-github-actions/learn/lecture/37223652#questions/19678376)
+- para colocar o robot nas dependências, é necessário um arquivo chamado "requirements.txt", assim da pra rodar o "pip install" apontando para esse arquivo
 
 **Exemplo de Action do Git**:
 ```name: GitHub Actions Demo

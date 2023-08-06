@@ -5,7 +5,7 @@ Library        DateTime
 
 *** Variables ***
 ${BROWSER}                  chromium
-${HEADLESS}                 ${false}    #para ver o navegador abrindo e interagindo com os testes
+${HEADLESS}                 ${false}    #para ver o navegador abrindo e interagindo com os testes, se colocar "false", quer dizer que não precisa abrir para ver rodando
 ${SITE_SERVE_REST}          https://front.serverest.dev/login
 ${BOTAO_CADASTRESE}         css=.btn-link
 ${INPUT_NOME_CADASTRO}      id=nome
