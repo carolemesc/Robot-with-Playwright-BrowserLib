@@ -40,4 +40,5 @@
 - teste específico: `robot -t "Nome do Teste" caminho_do_arquivo_de_teste.robot`
 - todos os testes do arquivo: `robot caminho/para/o/seu/arquivo_de_teste.robot`
 
-
+# CI/CD usando o Github Actions
+- é possível colocar no "summary" uma action de robot framework que mostra os resultados dos testes de forma mais intuitiva (como em uma tabela) - [Aula 30 - módulo 5 - 5'30"](https://www.udemy.com/course/robot-framework-com-playwright-e-github-actions/learn/lecture/37223652#questions/19678376)
