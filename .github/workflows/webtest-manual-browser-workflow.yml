@@ -5,6 +5,7 @@ on:
     inputs:           #é opcional, mas são campos que a pessoa vai ter que preencher quando ela for disparar o workflow
       browser:
         type: choice
+        required: true
         options:
           - chromium
           - firefox
@@ -14,10 +15,6 @@ jobs:
     web-tests:
         runs-on: ubuntu-20.04
         permissions: write-all  #para não ter problema de permissão quando for usar o token do github
-        # strategy:
-        #     matrix:     #a matriz é usada, nesse caso, para rodar os jobs em paralelo em diferentes browsers
-        #         browser: [chromium, firefox, webkit]
-        #     fail-fast: false    #assim, caso falhar em algum navagador, vai continuar rodando para os outros
         steps:
             - name: checkout    #vai baixar os arquivos do repositório para poder rodar nos testes
               uses: actions/checkout@v3
